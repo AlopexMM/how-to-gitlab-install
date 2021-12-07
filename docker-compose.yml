@@ -1,0 +1,24 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  container_name: gitlab
+  restart: always
+  hostname: "${HOSTNAME}"
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      # Add the config for gitlab
+      external_url "https://${HOSTNAME}"
+      gitlab_rails['gitlab_shell_ssh_port'] = 2224
+      nginx['redirect_http_to_https'] = true
+      nginx['ssl_certificate'] =  "/etc/gitlab/ssl/fullchain.pem"
+      nginx['ssl_certificate_key'] =  "/etc/gitlab/ssl/privkey.pem"
+      nginx['ssl_dhparam'] =  "/etc/gitlab/ssl/dhparams.pem"
+  ports:
+    - '80:80'
+    - '443:443'
+    - '2224:22'
+  volumes:
+    - '${GITLAB_HOME}/config:/etc/gitlab'
+    - '${GITLAB_HOME}/logs:/var/log/gitlab'
+    - '${GITLAB_HOME}/data:/var/opt/gitlab'
+    - '${GITLAB_HOME}/config/ssl:/etc/gitlab/ssl'
+    - '${GITLAB_HOME}/backups:/var/opt/gitlab/backups/
