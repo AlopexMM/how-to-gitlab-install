@@ -1,5 +1,5 @@
 web:
-  image: 'gitlab/gitlab-ce:latest'
+  image: 'gitlab/gitlab-ce:${TAG}'
   container_name: gitlab
   restart: always
   hostname: "${HOSTNAME}"

@@ -9,11 +9,12 @@ Se requiere que se encuentre instalado docker y docker-compose, puede buscar la 
 
 HOSTNAME: Contiene el nombre de la pagina "example@dominio.com"
 GITLAB_HOME: direccion donde se van a crear los directorios config, logs, ssl y data
+TAG: Para especificar la versión de gitlab que se va a usar
 
 > GITLAB_OMNIBUS_CONFIG
 > Debajo de esa variable en el archivo docker-compose se encuentra las configuraciones que se impactaran en el archivo gitlab.rb
 
-2. Creamos los directorios de la aplicacion
+2. Creamos los directorios de la aplicacion y las llaves ssl
 
 ```bash
 # apt install -y certbot
@@ -43,6 +44,12 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 > IMPORTANTE
 > Siempre se debe utilizar en la misma versión los backups en caso de ser vieja la versión
 >  se debe recuperar primero con la vieja versión y luego se traslada el container a la nueva versión
+> 
+> Podemos revisar la versión dentro del container ejecutando el comando 
+> 
+> ```bash
+> # docker exec -it <container name> gitlab-rake gitlab:env:info
+> ```
 
 Para ejecutar el backup realizamos el siguiente comando
 
