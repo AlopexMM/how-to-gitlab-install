@@ -7,11 +7,19 @@ Se requiere que se encuentre instalado docker y docker-compose, puede buscar la 
 
 1. Se debe crear un archivo .env con las siguientes variables de entorno
 
-HOSTNAME: Contiene el nombre de la pagina "example@dominio.com"
+HOSTNAME: Contiene el nombre de la pagina "example.dominio.com"
 
 GITLAB_HOME: direccion donde se van a crear los directorios config, logs, ssl y data
 
 TAG: Para especificar la versión de gitlab que se va a usar
+
+Ejemplo del archivo .env:
+
+HOSTNAME=gitlab.dominio.com
+
+GITLAB_HOME=/srv/gitlab
+
+TAG=14.2.1-ce.0
 
 > GITLAB_OMNIBUS_CONFIG
 >
@@ -46,18 +54,6 @@ TAG: Para especificar la versión de gitlab que se va a usar
 # docker-compose up -d
 
 ```
-
-> Se puede transmitir el proyecto copiando la carpeta con scp o utilizando rsync
->
-> Ejemplo:
->
-> ```bash
->
-> $ tar czf gitlab_install.tar.gz gitlab_install
->
-> $ scp gitlab_install.tar.gz [USER]@[IP ADDRESS]:[PATH]
->
-> ```
 
 Una vez que esta corriendo con status healthy revisamos la clave de root con el comando
 
