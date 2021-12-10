@@ -1,3 +1,6 @@
+
+This is a setup guide for more information read [Gitlab Docs](https://docs.gitlab.com/ee/)
+
 # Pre configs
 
 It has to be install docker and docker-compose, you can see the installation process in:
@@ -15,11 +18,15 @@ TAG: this has the version tag of Gitlab
 
 Example of .env file:
 
+```
+
 HOSTNAME=gitlab.dominio.com
 
 GITLAB_HOME=/srv/gitlab
 
 TAG=14.2.1-ce.0
+
+```
 
 > GITLAB_OMNIBUS_CONFIG
 >
@@ -28,8 +35,6 @@ TAG=14.2.1-ce.0
 2. Create the directories for the app
 
 ```bash
-
- # mkdir -p /srv/gitlab/{config/ssl,logs,backups,data}
 
  # apt install -y certbot
  
@@ -65,13 +70,13 @@ When the status healthy in the container we check the root key with the command:
 
 # Backup
 
-> IMPORTANTE
+> IMPORTANT
 >
-> Siempre se debe utilizar en la misma versión los backups en caso de ser vieja la versión
+> Always use the same version of gitlab
 >
->  se debe recuperar primero con la vieja versión y luego se traslada el container a la nueva versión
+>  if you need to restore a backup in a new server first do the restore with the old version and then change this
 > 
-> Podemos revisar la versión dentro del container ejecutando el comando 
+> We can check the version with the command:
 > 
 > ```bash
 >
@@ -79,29 +84,25 @@ When the status healthy in the container we check the root key with the command:
 >
 > ```
 
-Para ejecutar el backup realizamos el siguiente comando
+To execute the backup we need to execute the command:
 
 ```bash
 
  # docker exec -t <container name> gitlab-backup create BACKUP=$(date +'%Y-%m-%d')
 
- # docker stop <container name>
-
- # tar czf gitlab_secrets_$(date +'%Y-%m-%d').tar.gz /srv/gitlab/config/{gitlab.rb,gitlab-secrets.json}
-
- # docker start <container name>
+ # tar czf gitlab_secrets_$(date +'%Y-%m-%d').tar.gz /srv/gitlab/config/gitlab.rb /srv/gitlab/config/gitlab-secrets.json
 
 ```
 
-Se puede poner un cron para que se ejecuten esos comandos o crear un script que los ejecute
+In the repo i add a script to manage this
 
-> Como buena practica se recomienda guardar los backups en un servidor diferente
+> As best practices i recomend save the backups in another server
 
 # Restore
 
-Iniciamos un contenedor de gitlab, aqui no es necesario hacer los pasos de certbot y dhparam
+Init gitlab, here we do not need to run the steps of certbot and dhparam
 
-Apagar los procesos que se encutran conectados la base de datos
+Shutdown the process connected to data base
 
 ```bash
 
@@ -111,7 +112,7 @@ Apagar los procesos que se encutran conectados la base de datos
 
 ```
 
-Verificar que todos los procesos estan apagados
+Check if the process are down
 
 ```bash
 
@@ -119,19 +120,19 @@ Verificar que todos los procesos estan apagados
 
 ```
 
-Correr la recuperacion. 
+Run the restore
 
-> NOTA: fijarse que "_gitlab_backup.tar" se omite del nombre
+> NOTE: see that we omited the "_gitlab_backup.tar" name part.
 
 ```bash
 
- # docker exec -it <name of container> gitlab-backup restore BACKUP=<nombre del archivo>
+ # docker exec -it <name of container> gitlab-backup restore BACKUP=<name of file>
 
 ```
 
-> NOTA: puede que devuelva error de permisos, con chmod puede modificarlos
+> NOTA: It could promt permission error, use chmod to modified it.
 
-Copiamos archivos secrets
+Copy secrets files
 
 ```bash
 
@@ -139,7 +140,7 @@ Copiamos archivos secrets
 
 ```
 
-Reiniciar Gitlab
+Restart Gitlab
 
 ```bash
 
@@ -147,7 +148,7 @@ Reiniciar Gitlab
 
 ```
 
-Verificas GitLab
+Verify GitLab
 
 ```bash
 

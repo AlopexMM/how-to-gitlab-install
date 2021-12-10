@@ -1,3 +1,6 @@
+
+Esta es una guia inicial, para mas informacion dirigirse a [Gitlab Docs](https://docs.gitlab.com/ee/)
+
 # Preconfiguraciones
 
 Se requiere que se encuentre instalado docker y docker-compose, puede buscar la información en:
@@ -15,11 +18,15 @@ TAG: Para especificar la versión de gitlab que se va a usar
 
 Ejemplo del archivo .env:
 
+```
+
 HOSTNAME=gitlab.dominio.com
 
 GITLAB_HOME=/srv/gitlab
 
 TAG=14.2.1-ce.0
+
+```
 
 > GITLAB_OMNIBUS_CONFIG
 >
@@ -28,8 +35,6 @@ TAG=14.2.1-ce.0
 2. Creamos los directorios de la aplicacion y las llaves ssl
 
 ```bash
-
- # mkdir -p /srv/gitlab/{config/ssl,logs,backups,data}
 
  # apt install -y certbot
  
@@ -85,11 +90,7 @@ Para ejecutar el backup realizamos el siguiente comando
 
  # docker exec -t <container name> gitlab-backup create BACKUP=$(date +'%Y-%m-%d')
 
- # docker stop <container name>
-
- # tar czf gitlab_secrets_$(date +'%Y-%m-%d').tar.gz /srv/gitlab/config/{gitlab.rb,gitlab-secrets.json}
-
- # docker start <container name>
+ # tar czf gitlab_secrets_$(date +'%Y-%m-%d').tar.gz /srv/gitlab/config/gitlab.rb /srv/gitlab/config/gitlab-secrets.json
 
 ```
 
@@ -101,7 +102,7 @@ Se puede poner un cron para que se ejecuten esos comandos o crear un script que 
 
 Iniciamos un contenedor de gitlab, aqui no es necesario hacer los pasos de certbot y dhparam
 
-Apagar los procesos que se encutran conectados la base de datos
+Apagar los procesos que se encuentran conectados la base de datos
 
 ```bash
 
